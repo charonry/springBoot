@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+
 /**
  * @description:
  * @author: charon
@@ -12,7 +14,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AjaxResponse {
+public class AjaxResponse implements Serializable {
+    private static final long serialVersionUID = 5660090721628131251L;
     private boolean isok;
     private int code;
     private String message;

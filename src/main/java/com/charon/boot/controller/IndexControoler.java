@@ -1,4 +1,4 @@
-package com.charon.boot.Controller;
+package com.charon.boot.controller;
 
 import com.charon.boot.entity.Article;
 import com.charon.boot.entity.Reader;
@@ -18,12 +18,17 @@ import java.util.Date;
 @RestController
 public class IndexControoler {
 
+    /**
+     * 对于lombok插件的使用
+     *
+     * @return
+     */
     @RequestMapping("/hello")
     public Article hello() {
         Article article = new Article(1L,"charon","boot","2.o"
-                ,new Date().toString(), new ArrayList<Reader>());
+                ,new Date(), new ArrayList<Reader>());
         Article articleBuilder = Article.builder().id(2l).build();
         log.info("创建Article{}",articleBuilder);
-        return articleBuilder;
+        return article;
     }
 }
