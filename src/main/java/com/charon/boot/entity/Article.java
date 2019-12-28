@@ -22,6 +22,6 @@ public class Article {
     private String title;
     private String content;
     private String createTime;
-    private List<ReaderBean> reader;
+    private List<Reader> reader;
 
 }
