@@ -3,6 +3,9 @@ package com.charon.boot.controller;
 import com.charon.boot.entity.AjaxResponse;
 import com.charon.boot.entity.Article;
 import com.charon.boot.service.ArticleRestService;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +36,12 @@ public class ArticleRestController {
      * @param article
      * @return
      */
+    @ApiOperation(value = "添加文章", notes = "添加新的文章", tags = "Article",httpMethod = "POST")
+    @ApiResponses({
+            @ApiResponse(code=200,message="成功",response=AjaxResponse.class),
+            @ApiResponse(code=400,message="用户输入错误",response=AjaxResponse.class),
+            @ApiResponse(code=500,message="系统内部错误",response=AjaxResponse.class)
+    })
     @RequestMapping(value = "/article", method = POST, produces = "application/json")
     public AjaxResponse saveArticle(@RequestBody Article article) {
         // 因为使用了lombok的Slf4j注解，这里可以直接使用log变量打印日志
