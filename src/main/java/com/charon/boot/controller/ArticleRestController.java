@@ -2,7 +2,9 @@ package com.charon.boot.controller;
 
 import com.charon.boot.entity.AjaxResponse;
 import com.charon.boot.entity.Article;
+import com.charon.boot.service.ArticleRestService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,9 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequestMapping("/rest")
 public class ArticleRestController {
 
+    @Autowired
+    private ArticleRestService articleRestService;
+
     /**
      *  增加一篇Article ，使用POST方法
      *
@@ -32,6 +37,7 @@ public class ArticleRestController {
     public AjaxResponse saveArticle(@RequestBody Article article) {
         // 因为使用了lombok的Slf4j注解，这里可以直接使用log变量打印日志
         log.info("saveArticle：{}",article);
+        log.info("articleRestService return :" + articleRestService.saveArticle(article));
         return  AjaxResponse.success(article);
     }
 
