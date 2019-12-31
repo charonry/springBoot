@@ -1,0 +1,16 @@
+family:
+  family-name: "happy-family"
+  father:
+    name: charon
+    age: 23
+  mother:
+    alias:
+      - crane
+      - alice
+  child:
+    name: lovey
+    age: ${family.father.age:5}
+    friends:
+      - hobby: football
+        sex:  male
+      - {hobby: basketball,sex: female}
