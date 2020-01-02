@@ -16,16 +16,18 @@ import java.util.List;
 @Repository
 public class ArticleJDBCDao {
 
-    // jdbcTemplate.update适合于insert 、update和delete操作；
     @Resource
-    private JdbcTemplate jdbcTemplate;
+    private JdbcTemplate primaryJdbcTemplate;
 
     /**
      * 保存文章
      *
      * @param article
      */
-    public void save(Article article) {
+    public void save(Article article,JdbcTemplate jdbcTemplate) {
+        if(jdbcTemplate == null){
+            jdbcTemplate= primaryJdbcTemplate;
+        }
         jdbcTemplate.update("INSERT INTO article(author, title,content,create_time) values(?, ?, ?, ?)",
                 article.getAuthor(),
                 article.getTitle(),
@@ -39,9 +41,8 @@ public class ArticleJDBCDao {
      *
      * @param id
      */
-    public void deleteById(Long id) {
+    public void deleteById(Long id,JdbcTemplate jdbcTemplate) {
         jdbcTemplate.update("DELETE FROM article WHERE id = ?",new Object[]{id});
-
     }
 
 
@@ -51,7 +52,7 @@ public class ArticleJDBCDao {
      *
      * @param article
      */
-    public void updateById(Article article) {
+    public void updateById(Article article,JdbcTemplate jdbcTemplate) {
         jdbcTemplate.update("UPDATE article SET author = ?, title = ? ,content = ?,create_time = ? WHERE id = ?",
                 article.getAuthor(),
                 article.getTitle(),
@@ -67,7 +68,7 @@ public class ArticleJDBCDao {
      * @param id
      * @return
      */
-    public Article findById(Long id) {
+    public Article findById(Long id,JdbcTemplate jdbcTemplate) {
         // queryForObject用于查询单条记录返回结果
         return (Article) jdbcTemplate.queryForObject("SELECT * FROM article WHERE id=?", new Object[]{id}, new BeanPropertyRowMapper(Article.class));
     }
@@ -79,7 +80,7 @@ public class ArticleJDBCDao {
      *
      * @return
      */
-    public List<Article> findAll(){
+    public List<Article> findAll(JdbcTemplate jdbcTemplate){
         return (List<Article>) jdbcTemplate.query("SELECT * FROM article ",  new BeanPropertyRowMapper(Article.class));
     }
 }
