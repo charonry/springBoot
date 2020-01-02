@@ -2,7 +2,7 @@ package com.charon.boot.mockMvc;
 
 import com.charon.boot.controller.ArticleRestController;
 import com.charon.boot.entity.Article;
-import com.charon.boot.service.ArticleRestService;
+import com.charon.boot.service.impl.ArticleRestJDBCServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -37,7 +37,7 @@ public class ArticleRestControllerTest3 {
     private MockMvc mockMvc;
 
     @MockBean
-    private ArticleRestService articleRestService;
+    private ArticleRestJDBCServiceImpl articleRestJDBCServiceImpl;
 
     @Test
     public void saveArticle() throws Exception {
@@ -53,7 +53,7 @@ public class ArticleRestControllerTest3 {
         ObjectMapper objectMapper = new ObjectMapper();
         Article articleObj = objectMapper.readValue(article, Article.class);
         // 打桩
-        when(articleRestService.saveArticle(articleObj)).thenReturn("OK");
+        when(articleRestJDBCServiceImpl.saveArticle(articleObj)).thenReturn(articleObj);
 
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.request(HttpMethod.POST, "/rest/article")

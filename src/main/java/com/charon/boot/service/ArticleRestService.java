@@ -1,20 +1,23 @@
 package com.charon.boot.service;
 
 import com.charon.boot.entity.Article;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @description:
  * @author: charon
- * @create: 2019-12-29 20:42
+ * @create: 2020-01-02 22:45
  **/
-@Slf4j
-@Service
-public class ArticleRestService {
+public interface ArticleRestService {
 
-    public String saveArticle( Article article) {
-        log.info("saveArticle：{}",article);
-        return  "保存作者信息";
-    }
+    public Article saveArticle(Article article);
+
+    public void deleteArticle(Long id);
+
+    public void updateArticle(Article article);
+
+    public Article getArticle(Long id);
+
+    public List<Article> getAll();
 }

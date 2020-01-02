@@ -3,16 +3,15 @@ package com.charon.boot.controller;
 import com.charon.boot.entity.AjaxResponse;
 import com.charon.boot.entity.Article;
 import com.charon.boot.service.ArticleRestService;
+import com.charon.boot.service.impl.ArticleRestJDBCServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.Date;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -27,8 +26,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.*;
 @RequestMapping("/rest")
 public class ArticleRestController {
 
-    @Autowired
-    private ArticleRestService articleRestService;
+    @Resource(name = "articleRestJDBCServiceImpl")
+    private ArticleRestService articleRestJDBCServiceImpl;
 
     /**
      *  增加一篇Article ，使用POST方法
@@ -44,9 +43,7 @@ public class ArticleRestController {
     })
     @RequestMapping(value = "/article", method = POST, produces = "application/json")
     public AjaxResponse saveArticle(@RequestBody Article article) {
-        // 因为使用了lombok的Slf4j注解，这里可以直接使用log变量打印日志
-        log.info("saveArticle：{}",article);
-        log.info("articleRestService return :" + articleRestService.saveArticle(article));
+        log.info("articleRestService return :" + articleRestJDBCServiceImpl.saveArticle(article));
         return  AjaxResponse.success(article);
     }
 
@@ -58,7 +55,7 @@ public class ArticleRestController {
      */
     @RequestMapping(value = "/article/{id}", method = DELETE, produces = "application/json")
     public AjaxResponse deleteArticle(@PathVariable Long id) {
-        log.info("deleteArticle：{}",id);
+        articleRestJDBCServiceImpl.deleteArticle(id);
         return AjaxResponse.success(id);
     }
 
@@ -73,7 +70,7 @@ public class ArticleRestController {
     @RequestMapping(value = "/article/{id}", method = PUT, produces = "application/json")
     public AjaxResponse updateArticle(@PathVariable Long id, @RequestBody Article article) {
         article.setId(id);
-        log.info("updateArticle：{}",article);
+        articleRestJDBCServiceImpl.updateArticle(article);
         return AjaxResponse.success(article);
     }
 
@@ -85,14 +82,16 @@ public class ArticleRestController {
      */
     @RequestMapping(value = "/article/{id}", method = GET, produces = "application/json")
     public AjaxResponse getArticle(@PathVariable Long id) {
+        return AjaxResponse.success(articleRestJDBCServiceImpl.getArticle(id));
+    }
 
-        // 使用lombok提供的builder构建对象
-        Article article1 = Article.builder()
-                .id(1L)
-                .author("charon")
-                .content("spring boot")
-                .createTime(new Date())
-                .title("title").build();
-        return AjaxResponse.success(article1);
+    /**
+     * 获取全部数据
+     *
+     * @return
+     */
+    @GetMapping( "/article")
+    public @ResponseBody  AjaxResponse getAllArticle() {
+        return AjaxResponse.success(articleRestJDBCServiceImpl.getAll());
     }
 }
