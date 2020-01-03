@@ -37,7 +37,7 @@ public class ArticleRestJDBCServiceImpl implements ArticleRestService {
 
         articleJDBCDao.save(article,secondaryJdbcTemplate);
         // 人为制造一个异常，用于测试事务
-        // int a = 2/0；
+        // int a = 2/0;
         return article;
     }
 
