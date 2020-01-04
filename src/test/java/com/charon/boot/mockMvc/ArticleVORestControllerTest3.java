@@ -1,36 +1,43 @@
 package com.charon.boot.mockMvc;
 
 import com.charon.boot.controller.ArticleRestController;
+import com.charon.boot.entity.ArticleVO;
+import com.charon.boot.service.impl.ArticleRestServiceJPAImpl;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Before;
 import org.junit.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpMethod;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import javax.annotation.Resource;
+
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 /**
- * @description: 测试Mockito
+ * @description: 测试Mockito,加上作用返回和自动注解
  * @author: charon
  * @create: 2019-12-29 20:44
  **/
 @Slf4j
-@SpringBootTest
-public class ArticleRestControllerTest {
+@WebMvcTest(ArticleRestController.class)
+@RunWith(SpringRunner.class)
+@AutoConfigureMockMvc
+public class ArticleVORestControllerTest3 {
     // mock对象
+    @Resource
     private MockMvc mockMvc;
 
-    @Before
-    public void setUp(){
-        mockMvc= MockMvcBuilders.standaloneSetup
-                (new ArticleRestController()).build();
-
-    }
+    @MockBean
+    private ArticleRestServiceJPAImpl articleRestServiceJPAImpl;
 
     @Test
     public void saveArticle() throws Exception {
@@ -42,6 +49,11 @@ public class ArticleRestControllerTest {
                 "    \"createTime\": \"2019-12-29 12:44:30\",\n" +
                 "    \"reader\":[{\"name\":\"cahron\",\"age\":22},{\"name\":\"crane\",\"age\":23}]\n" +
                 "}";
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        ArticleVO articleVOObj = objectMapper.readValue(article, ArticleVO.class);
+        // 打桩
+        when(articleRestServiceJPAImpl.saveArticle(articleVOObj)).thenReturn(articleVOObj);
 
         MvcResult result = mockMvc.perform(
                 MockMvcRequestBuilders.request(HttpMethod.POST, "/rest/article")

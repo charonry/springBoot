@@ -20,7 +20,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Article implements Serializable {
+public class ArticleVO implements Serializable {
 
     private static final long serialVersionUID = -1928222831836337996L;
 
