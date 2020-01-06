@@ -1,9 +1,8 @@
 package com.charon.boot.jpa;
 
-import com.charon.boot.dao.ArticleRepository;
-import com.charon.boot.model.Article;
+import com.charon.boot.jpa.bootjpa.ArticleRepository;
+import com.charon.boot.jpa.bootjpa.Article;
 import com.charon.boot.utils.DynamicJPAUtils;
-import org.hibernate.annotations.DynamicUpdate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeanUtils;

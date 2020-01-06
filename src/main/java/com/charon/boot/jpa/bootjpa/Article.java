@@ -1,4 +1,4 @@
-package com.charon.boot.model;
+package com.charon.boot.jpa.bootjpa;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,8 +1,10 @@
 package com.charon.boot.service.impl;
 
-import com.charon.boot.dao.ArticleRepository;
+import com.charon.boot.jpa.bootjpa.ArticleRepository;
 import com.charon.boot.entity.ArticleVO;
-import com.charon.boot.model.Article;
+import com.charon.boot.jpa.bootjpa.Article;
+import com.charon.boot.jpa.bootjpa2.Message;
+import com.charon.boot.jpa.bootjpa2.MessageRepository;
 import com.charon.boot.service.ArticleRestService;
 import com.charon.boot.utils.DozerUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -26,12 +28,21 @@ public class ArticleRestServiceJPAImpl implements ArticleRestService {
     private ArticleRepository articleRepository;
 
     @Resource
+    private MessageRepository messageRepository;
+
+    @Resource
     private Mapper dozerMapper;
 
     @Override
     public ArticleVO saveArticle(ArticleVO articleVO) {
         Article articlePO = dozerMapper.map(articleVO, Article.class);
         articleRepository.save(articlePO);
+
+        Message message = new Message();
+        message.setId(1L);
+        message.setName("charon");
+        message.setContent("ware were");
+        messageRepository.save(message);
         return  articleVO;
     }
 
