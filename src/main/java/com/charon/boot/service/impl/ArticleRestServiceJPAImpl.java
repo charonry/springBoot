@@ -10,6 +10,7 @@ import com.charon.boot.utils.DozerUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.dozer.Mapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -34,6 +35,7 @@ public class ArticleRestServiceJPAImpl implements ArticleRestService {
     private Mapper dozerMapper;
 
     @Override
+    @Transactional
     public ArticleVO saveArticle(ArticleVO articleVO) {
         Article articlePO = dozerMapper.map(articleVO, Article.class);
         articleRepository.save(articlePO);
@@ -43,6 +45,8 @@ public class ArticleRestServiceJPAImpl implements ArticleRestService {
         message.setName("charon");
         message.setContent("ware were");
         messageRepository.save(message);
+        // 测试异常
+        int a = 2/0;
         return  articleVO;
     }
 

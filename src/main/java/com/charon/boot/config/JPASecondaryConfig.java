@@ -1,68 +1,76 @@
 package com.charon.boot.config;
 
+import com.mysql.cj.jdbc.MysqlXADataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings;
-import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
-import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-import javax.annotation.Resource;
-import javax.persistence.EntityManager;
 import javax.sql.DataSource;
-import java.util.Map;
+import java.sql.SQLException;
+import java.util.HashMap;
 
 /**
- * @description: 配置第二个数据源
+ * @description:
  * @author: charon
- * @create: 2020-01-06 16:09
+ * @create: 2020-01-06 19:32
  **/
 @Configuration
-@EnableTransactionManagement
-@EnableJpaRepositories(
-        entityManagerFactoryRef="entityManagerFactorySecondary",
-        transactionManagerRef="transactionManagerSecondary",
-        basePackages= { "com.charon.boot.jpa.bootjpa2" })
+@DependsOn("transactionManager")
+@EnableJpaRepositories(basePackages = "com.charon.boot.jpa.bootjpa2",   //注意这里
+        entityManagerFactoryRef = "secondaryEntityManager",
+        transactionManagerRef = "transactionManager")
 public class JPASecondaryConfig {
 
-    @Resource
-    @Qualifier("secondaryDataSource")
-    private DataSource secondaryDataSource;
+    @Autowired
+    private JpaVendorAdapter jpaVendorAdapter;
 
-    @Bean(name = "entityManagerSecondary")
-    public EntityManager entityManager(EntityManagerFactoryBuilder builder) {
-        return entityManagerFactorySecondary(builder).getObject().createEntityManager();
 
+    @Bean(name = "secondaryDataSourceProperties")
+    @Qualifier("secondaryDataSourceProperties")
+    @ConfigurationProperties(prefix = "spring.datasource.secondary")
+    public DataSourceProperties masterDataSourceProperties() {
+        return new DataSourceProperties();
     }
 
 
-
-    @Bean(name = "entityManagerFactorySecondary")
-    public LocalContainerEntityManagerFactoryBean entityManagerFactorySecondary (EntityManagerFactoryBuilder builder) {
-        return builder
-                .dataSource(secondaryDataSource)
-                .properties(getVendorProperties())
-                .packages("com.charon.boot.jpa.bootjpa2")
-                .persistenceUnit("secondaryPersistenceUnit")
-                .build();
+    @Bean(name = "secondaryDataSource", initMethod = "init", destroyMethod = "close")
+    @ConfigurationProperties(prefix = "spring.datasource.secondary")
+    public DataSource masterDataSource() throws SQLException {
+        MysqlXADataSource mysqlXaDataSource = new MysqlXADataSource();
+        mysqlXaDataSource.setUrl(masterDataSourceProperties().getUrl());
+        mysqlXaDataSource.setPinGlobalTxToPhysicalConnection(true);
+        mysqlXaDataSource.setPassword(masterDataSourceProperties().getPassword());
+        mysqlXaDataSource.setUser(masterDataSourceProperties().getUsername());
+        AtomikosDataSourceBean xaDataSource = new AtomikosDataSourceBean();
+        xaDataSource.setXaDataSource(mysqlXaDataSource);
+        xaDataSource.setUniqueResourceName("secondary");
+        xaDataSource.setBorrowConnectionTimeout(60);
+        xaDataSource.setMaxPoolSize(20);
+        return xaDataSource;
     }
 
-    @Resource
-    private JpaProperties jpaProperties;
+    @Bean(name = "secondaryEntityManager")
+    @DependsOn("transactionManager")
+    public LocalContainerEntityManagerFactoryBean masterEntityManager() throws Throwable {
 
-    private Map getVendorProperties() {
-        return jpaProperties.getHibernateProperties(new HibernateSettings());
-    }
-
-    @Bean(name = "transactionManagerSecondary")
-    PlatformTransactionManager transactionManagerSecondary(EntityManagerFactoryBuilder builder) {
-        return new JpaTransactionManager(entityManagerFactorySecondary(builder).getObject());
-
+        HashMap<String, Object> properties = new HashMap<String, Object>();
+        properties.put("hibernate.transaction.jta.platform", AtomikosJtaPlatform.class.getName());
+        properties.put("javax.persistence.transactionType", "JTA");
+        LocalContainerEntityManagerFactoryBean entityManager = new LocalContainerEntityManagerFactoryBean();
+        entityManager.setJtaDataSource(masterDataSource());
+        entityManager.setJpaVendorAdapter(jpaVendorAdapter);
+        //这里要修改成主数据源的扫描包
+        entityManager.setPackagesToScan("com.charon.boot.jpa.bootjpa2");
+        entityManager.setPersistenceUnitName("secondaryPersistenceUnit");
+        entityManager.setJpaPropertyMap(properties);
+        return entityManager;
     }
 }
