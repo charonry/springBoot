@@ -1,6 +1,6 @@
 package com.charon.boot.controller;
 
-import com.charon.boot.entity.Article;
+import com.charon.boot.entity.ArticleVO;
 import com.charon.boot.entity.Reader;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,11 +24,11 @@ public class IndexControoler {
      * @return
      */
     @RequestMapping("/hello")
-    public Article hello() {
-        Article article = new Article(1L,"charon","boot","2.o"
+    public ArticleVO hello() {
+        ArticleVO articleVO = new ArticleVO(1L,"charon","boot","2.o"
                 ,new Date(), new ArrayList<Reader>());
-        Article articleBuilder = Article.builder().id(2l).build();
-        log.info("创建Article{}",articleBuilder);
-        return article;
+        ArticleVO articleVOBuilder = ArticleVO.builder().id(2l).build();
+        log.info("创建Article{}", articleVOBuilder);
+        return articleVO;
     }
 }
