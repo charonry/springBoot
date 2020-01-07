@@ -10,6 +10,7 @@ import com.charon.boot.utils.DozerUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.dozer.Mapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -27,15 +28,14 @@ public class ArticleMybatisRestServiceImpl implements ArticleRestService {
     @Resource
     private MessageDao messageDao;
 
-
     @Override
+    @Transactional
     public ArticleVO saveArticle(ArticleVO article) {
         Article articlePO = dozerMapper.map(article,Article.class);
         articleMapper.insert(articlePO);
-
         Message message = new Message();
-        message.setName("curry");
-        message.setContent("厉害");
+        message.setName("erre");
+        message.setContent("erre");
         messageDao.insert(message);
         return null;
     }

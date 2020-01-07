@@ -5,42 +5,46 @@ import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.jta.atomikos.AtomikosDataSourceBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import javax.sql.DataSource;
 
 @Configuration
+@EnableConfigurationProperties
+@EnableAutoConfiguration
 @MapperScan(basePackages = "com.charon.boot.dao.bootmybatis2",
         sqlSessionTemplateRef = "secondarySqlSessionTemplate")
-public class SecondaryDataSourceConfig {
+public class SecondaryDataSourceJTAConfig {
 
-    @Bean(name = "secondaryDataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.secondary")
-    public DataSource testDataSource() {
-        return DataSourceBuilder.create().build();
+    @Bean("secondaryDataSource")
+    @ConfigurationProperties(prefix = "secondarydb")
+    @Primary
+    public DataSource secondaryDataSource() {
+        return new AtomikosDataSourceBean();
     }
 
-    @Bean(name = "secondarySqlSessionFactory")
-    public SqlSessionFactory testSqlSessionFactory(@Qualifier("secondaryDataSource") DataSource dataSource) throws Exception {
+    @Bean("secondarySqlSessionFactory")
+    @Primary
+    public SqlSessionFactory secondarySqlSessionFactory(@Qualifier("secondaryDataSource") DataSource dataSource)
+            throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
         bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:generator/bootmybatis2/*.xml"));
+        bean.setTypeAliasesPackage("com.charon.boot.model.bootmybatis2");
         return bean.getObject();
     }
 
-    @Bean(name = "secondaryTransactionManager")
-    public DataSourceTransactionManager testTransactionManager(@Qualifier("secondaryDataSource") DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
-    }
-
-    @Bean(name = "secondarySqlSessionTemplate")
-    public SqlSessionTemplate testSqlSessionTemplate(@Qualifier("secondarySqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
+    @Bean("secondarySqlSessionTemplate")
+    @Primary
+    public SqlSessionTemplate secondarySqlSessionTemplate(
+            @Qualifier("secondarySqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
-
 }
