@@ -1,4 +1,4 @@
-package com.charon.boot.model;
+package com.charon.boot.model.bootmybatis;
 
 import java.util.ArrayList;
 import java.util.Date;

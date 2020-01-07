@@ -1,7 +1,7 @@
 package com.charon.boot.mybatisBoot;
 
-import com.charon.boot.dao.ArticleMapper;
-import com.charon.boot.model.Article;
+import com.charon.boot.dao.bootmybatis.ArticleMapper;
+import com.charon.boot.model.bootmybatis.Article;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.junit.Test;

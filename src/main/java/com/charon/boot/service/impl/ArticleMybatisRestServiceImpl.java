@@ -1,8 +1,10 @@
 package com.charon.boot.service.impl;
 
-import com.charon.boot.dao.ArticleMapper;
+import com.charon.boot.dao.bootmybatis.ArticleMapper;
+import com.charon.boot.dao.bootmybatis2.MessageDao;
 import com.charon.boot.entity.ArticleVO;
-import com.charon.boot.model.Article;
+import com.charon.boot.model.bootmybatis.Article;
+import com.charon.boot.model.bootmybatis2.Message;
 import com.charon.boot.service.ArticleRestService;
 import com.charon.boot.utils.DozerUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +24,19 @@ public class ArticleMybatisRestServiceImpl implements ArticleRestService {
     @Resource
     private ArticleMapper articleMapper;
 
+    @Resource
+    private MessageDao messageDao;
+
 
     @Override
     public ArticleVO saveArticle(ArticleVO article) {
         Article articlePO = dozerMapper.map(article,Article.class);
         articleMapper.insert(articlePO);
+
+        Message message = new Message();
+        message.setName("curry");
+        message.setContent("厉害");
+        messageDao.insert(message);
         return null;
     }
 

@@ -6,14 +6,20 @@ spring:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
   datasource:
-    url: jdbc:mysql://localhost:3306/bootmybatis?useUnicode=true&characterEncoding=utf-8&useSSL=false
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.jdbc.Driver
+    primary:
+      jdbc-url: jdbc:mysql://localhost:3306/bootmybatis?useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.jdbc.Driver
+    secondary:
+      jdbc-url: jdbc:mysql://localhost:3306/bootmybatis2?useUnicode=true&characterEncoding=utf-8&useSSL=false
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.jdbc.Driver
 
 mybatis:
-  type-aliases-package: com.charon.boot.model
-  mapper-locations: classpath:generator/*.xml
+  type-aliases-package: com.charon.boot.model.*
+  mapper-locations: classpath:generator/*/*.xml
   configuration:
     map-underscore-to-camel-case: true
 

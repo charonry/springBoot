@@ -1,7 +1,7 @@
-package com.charon.boot.dao;
+package com.charon.boot.dao.bootmybatis;
 
-import com.charon.boot.model.Article;
-import com.charon.boot.model.ArticleExample;
+import com.charon.boot.model.bootmybatis.Article;
+import com.charon.boot.model.bootmybatis.ArticleExample;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

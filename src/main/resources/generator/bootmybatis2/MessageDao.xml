@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.charon.boot.dao.ArticleMapper">
-  <resultMap id="BaseResultMap" type="com.charon.boot.model.Article">
+<mapper namespace="com.charon.boot.dao.bootmybatis2.MessageDao">
+  <resultMap id="BaseResultMap" type="com.charon.boot.model.bootmybatis2.Message">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="author" jdbcType="VARCHAR" property="author" />
     <result column="content" jdbcType="VARCHAR" property="content" />
-    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -67,15 +65,15 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, author, content, create_time, title
+    id, content, `name`
   </sql>
-  <select id="selectByExample" parameterType="com.charon.boot.model.ArticleExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.charon.boot.model.bootmybatis2.MessageExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from article
+    from message
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -94,79 +92,59 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from article
+    from message
     where id = #{id,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from article
+    delete from message
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <delete id="deleteByExample" parameterType="com.charon.boot.model.ArticleExample">
-    delete from article
+  <delete id="deleteByExample" parameterType="com.charon.boot.model.bootmybatis2.MessageExample">
+    delete from message
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.charon.boot.model.Article" useGeneratedKeys="true">
-    insert into article (author, content, create_time, 
-      title)
-    values (#{author,jdbcType=VARCHAR}, #{content,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{title,jdbcType=VARCHAR})
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.charon.boot.model.bootmybatis2.Message" useGeneratedKeys="true">
+    insert into message (content, `name`)
+    values (#{content,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.charon.boot.model.Article" useGeneratedKeys="true">
-    insert into article
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.charon.boot.model.bootmybatis2.Message" useGeneratedKeys="true">
+    insert into message
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="author != null">
-        author,
-      </if>
       <if test="content != null">
         content,
       </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="title != null">
-        title,
+      <if test="name != null">
+        `name`,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="author != null">
-        #{author,jdbcType=VARCHAR},
-      </if>
       <if test="content != null">
         #{content,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="title != null">
-        #{title,jdbcType=VARCHAR},
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.charon.boot.model.ArticleExample" resultType="java.lang.Long">
-    select count(*) from article
+  <select id="countByExample" parameterType="com.charon.boot.model.bootmybatis2.MessageExample" resultType="java.lang.Long">
+    select count(*) from message
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update article
+    update message
     <set>
       <if test="record.id != null">
         id = #{record.id,jdbcType=BIGINT},
       </if>
-      <if test="record.author != null">
-        author = #{record.author,jdbcType=VARCHAR},
-      </if>
       <if test="record.content != null">
         content = #{record.content,jdbcType=VARCHAR},
       </if>
-      <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.title != null">
-        title = #{record.title,jdbcType=VARCHAR},
+      <if test="record.name != null">
+        `name` = #{record.name,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -174,40 +152,30 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update article
+    update message
     set id = #{record.id,jdbcType=BIGINT},
-      author = #{record.author,jdbcType=VARCHAR},
       content = #{record.content,jdbcType=VARCHAR},
-      create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      title = #{record.title,jdbcType=VARCHAR}
+      `name` = #{record.name,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.charon.boot.model.Article">
-    update article
+  <update id="updateByPrimaryKeySelective" parameterType="com.charon.boot.model.bootmybatis2.Message">
+    update message
     <set>
-      <if test="author != null">
-        author = #{author,jdbcType=VARCHAR},
-      </if>
       <if test="content != null">
         content = #{content,jdbcType=VARCHAR},
       </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="title != null">
-        title = #{title,jdbcType=VARCHAR},
+      <if test="name != null">
+        `name` = #{name,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.charon.boot.model.Article">
-    update article
-    set author = #{author,jdbcType=VARCHAR},
-      content = #{content,jdbcType=VARCHAR},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      title = #{title,jdbcType=VARCHAR}
+  <update id="updateByPrimaryKey" parameterType="com.charon.boot.model.bootmybatis2.Message">
+    update message
+    set content = #{content,jdbcType=VARCHAR},
+      `name` = #{name,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
