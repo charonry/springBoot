@@ -10,6 +10,12 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
+  mvc:
+    view:
+      suffix: .jsp
+      prefix: /WEB-INF/jsp/
+
+debug: true
 
 mybatis:
   type-aliases-package: com.charon.boot.model
