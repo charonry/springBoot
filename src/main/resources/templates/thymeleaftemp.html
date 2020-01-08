@@ -30,11 +30,9 @@
     </table>
 
     <section>第二段</section>
-    <form id="userForm" th:object="${user}">
-        <input id="id" name="id" th:value="*{id}"/>
-        <input id="username" name="username" th:value="*{username}"/>
-        <input id="password" name="password" th:value="*{password}"/>
-    </form>
+    <div th:replace="~{common/form::userForm(${user})}"></div>
+    <div th:insert="~{common/form::userForm(${user})}"></div>
+    <div th:include="~{common/form::userForm(${user})}"></div>
 
     <div th:text="hello"></div>
 
@@ -52,5 +50,16 @@
     <div th:text="${session.size()}"></div>
     <div th:text="${session.isEmpty()}"></div>
     <div th:text="${session.containsKey('foo')}"></div>
+
+
+    <script th:inline="javascript">
+        var user = [[${user}]];
+        var APP_PATH = [[${#request.getContextPath()}]];
+        var LANG_COUNTRY = [[${#locale.getLanguage()+'_'+#locale.getCountry()}]];
+
+        console.log(user.password);
+        console.log(APP_PATH);
+        console.log(LANG_COUNTRY);
+    </script>
 </body>
 </html>
