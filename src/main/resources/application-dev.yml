@@ -10,6 +10,11 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver
+  freemarker:
+    cache: false # 缓存配置 开发阶段应该配置为false
+    suffix: .html # 模版后缀名 默认为ftl
+    charset: UTF-8 # 文件编码
+    template-loader-path: classpath:/templates/
 
 mybatis:
   type-aliases-package: com.charon.boot.model

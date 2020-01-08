@@ -94,6 +94,13 @@
             <artifactId>webjars-locator</artifactId>
             <version>0.30</version>
         </dependency>
+
+        <!--整合freemarker模板引擎-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-freemarker</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>
