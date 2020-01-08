@@ -95,10 +95,10 @@
             <version>0.30</version>
         </dependency>
 
-        <!--整合freemarker模板引擎-->
+        <!--整合thymeleaf模板引擎-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-freemarker</artifactId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
     </dependencies>

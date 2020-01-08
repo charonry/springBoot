@@ -22,11 +22,33 @@ public class TemplateController {
     @Resource(name="articleMybatisRestServiceImpl")
     ArticleRestService articleRestService;
 
+    /**
+     * freemarker模板
+     *
+     * @param model
+     * @return
+     */
     @GetMapping("/freemarker")
-    public String index(Model model) {
+    public String freemarker(Model model) {
         List<ArticleVO> articles = articleRestService.getAll();
         model.addAttribute("articles", articles);
         //模版名称，实际的目录为：resources/templates/fremarkertemp.html
         return "fremarkertemp";
     }
+
+
+    /**
+     * thymeleaf模板
+     *
+     * @param model
+     * @return
+     */
+    @GetMapping("/thymeleaf")
+    public String thymeleaf(Model model) {
+        List<ArticleVO> articles = articleRestService.getAll();
+        model.addAttribute("articles", articles);
+        //模版名称，实际的目录为：resources/templates/thymeleaftemp.html
+        return "thymeleaftemp";
+    }
+
 }
