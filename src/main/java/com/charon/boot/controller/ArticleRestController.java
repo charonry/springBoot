@@ -1,17 +1,15 @@
 package com.charon.boot.controller;
 
-import com.charon.boot.entity.AjaxResponse;
+import com.charon.boot.exception.AjaxResponse;
 import com.charon.boot.entity.ArticleVO;
 import com.charon.boot.service.ArticleRestService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -77,7 +75,7 @@ public class ArticleRestController {
 
         articleRestService.updateArticle(article);
 
-        return AjaxResponse.success(article);
+        return AjaxResponse.success();
     }
 
     /**
