@@ -12,6 +12,7 @@
     <artifactId>boot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>boot</name>
+    <packaging>war</packaging>
     <description>Demo project for Spring Boot</description>
 
     <properties>
@@ -114,10 +115,19 @@
         </dependency>-->
 
         <!--添加undertow容器-->
-        <dependency>
+        <!--<dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-undertow</artifactId>
+        </dependency>-->
+
+        <!-- 外部jar包缺少servlet-api -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>4.0.1</version>
+            <scope>provided</scope>
         </dependency>
+
 
     </dependencies>
 
@@ -136,6 +146,7 @@
                 <filtering>false</filtering>
             </resource>
         </resources>-->
+        <finalName>charon-boot</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
