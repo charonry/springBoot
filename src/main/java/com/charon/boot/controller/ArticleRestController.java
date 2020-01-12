@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 
 import static org.springframework.web.bind.annotation.RequestMethod.*;
 
@@ -70,7 +71,7 @@ public class ArticleRestController {
      * @return
      */
     @RequestMapping(value = "/article/{id}", method = PUT, produces = "application/json")
-    public AjaxResponse updateArticle(@PathVariable Long id, @RequestBody ArticleVO article) {
+    public AjaxResponse updateArticle(@PathVariable Long id,@Valid @RequestBody ArticleVO article) {
         article.setId(id);
 
         articleRestService.updateArticle(article);

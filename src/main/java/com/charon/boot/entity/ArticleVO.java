@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -27,6 +28,7 @@ public class ArticleVO implements Serializable {
     private Long id;
     private String author;
     private String title;
+    @NotEmpty(message = "文章内容不能为空，请检查您的输入")
     private String content;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
