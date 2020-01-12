@@ -25,3 +25,8 @@ mybatis:
 logging:
   level:
     com.charon.boot: debug
+
+#注入第三种监听器
+context:
+  listener:
+    classes: com.charon.boot.customListener.MyListener3
