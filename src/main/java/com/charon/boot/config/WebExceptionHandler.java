@@ -3,12 +3,16 @@ package com.charon.boot.config;
 import com.charon.boot.exception.AjaxResponse;
 import com.charon.boot.exception.CustomException;
 import com.charon.boot.exception.CustomExceptionType;
+import com.charon.boot.exception.ModelViewException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @description: 全局捕获异常
@@ -49,5 +53,16 @@ public class WebExceptionHandler {
     public AjaxResponse handleBindException(BindException ex) {
         FieldError fieldError = ex.getBindingResult().getFieldError();
         return AjaxResponse.error(new CustomException(CustomExceptionType.USER_INPUT_ERROR,fieldError.getDefaultMessage()));
+    }
+
+    @ExceptionHandler(ModelViewException.class)
+    public ModelAndView viewExceptionHandler(HttpServletRequest req, ModelViewException e) {
+        ModelAndView modelAndView = new ModelAndView();
+        //将异常信息设置如modelAndView
+        modelAndView.addObject("exception", e);
+        modelAndView.addObject("url", req.getRequestURL());
+        modelAndView.setViewName("error");
+        //返回ModelAndView
+        return modelAndView;
     }
 }

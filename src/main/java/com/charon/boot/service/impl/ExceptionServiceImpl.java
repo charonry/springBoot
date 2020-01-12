@@ -1,7 +1,8 @@
-package com.charon.boot.service;
+package com.charon.boot.service.impl;
 
 import com.charon.boot.exception.CustomException;
 import com.charon.boot.exception.CustomExceptionType;
+import com.charon.boot.service.ExceptionService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import java.util.List;
  * @create: 2020-01-12 19:59
  **/
 @Service
-public class ExceptionServiceImpl implements  ExceptionService {
+public class ExceptionServiceImpl implements ExceptionService {
     @Override
     public void systemBizError() {
         try {
