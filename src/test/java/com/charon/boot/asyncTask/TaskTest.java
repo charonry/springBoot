@@ -1,6 +1,7 @@
 package com.charon.boot.asyncTask;
 
 import com.charon.boot.config.asyncTask.AsyncCallBackTask;
+import com.charon.boot.config.asyncTask.AsyncExecutorTask;
 import com.charon.boot.config.asyncTask.AsyncTask;
 import com.charon.boot.config.asyncTask.SyncTask;
 import org.junit.Test;
@@ -34,6 +35,9 @@ public class TaskTest {
     @Autowired
     private AsyncCallBackTask asyncCallBackTask;
 
+    @Autowired
+    private AsyncExecutorTask asyncExecutorTask;
+
     @Test
     public void testSyncTasks() throws Exception {
         syncTask.doTaskOne();
@@ -64,15 +68,13 @@ public class TaskTest {
         System.out.println("任务全部完成，总耗时：" + (end - start) + "毫秒");
     }
 
+
     @Test
-    public void test()throws Exception{
-        int i = 0;
-        System.out.println("开始");
-        long start = currentTimeMillis();
-        while (i==0) {
-            sleep(1000);
-        }
-        long end = currentTimeMillis();
-        System.out.println("任务全部完成，总耗时：" + (end - start) + "毫秒");
+    public void testAsyncExecutorTask() throws Exception {
+        asyncExecutorTask.doTaskOneCallback();
+        asyncExecutorTask.doTaskTwoCallback();
+        asyncExecutorTask.doTaskThreeCallback();
+        sleep(30 * 1000L);
     }
+
 }
