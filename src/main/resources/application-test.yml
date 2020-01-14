@@ -7,3 +7,5 @@ spring:
     time-zone: GMT+8
   profiles:
     active:
+logging:
+  config: classpath:log4j2-test.xml

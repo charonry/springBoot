@@ -23,5 +23,4 @@ mybatis:
     map-underscore-to-camel-case: true
 
 logging:
-  level:
-    com.charon.boot: debug
+  config: classpath:log4j2-dev.xml
